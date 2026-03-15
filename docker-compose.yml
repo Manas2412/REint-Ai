@@ -1,0 +1,9 @@
+services:
+  forecast-monitoring:
+    build: ./forecast-monitoring
+    ports:
+      - "3000:3000"
+    environment:
+      - BMRS_API_KEY=${BMRS_API_KEY}
+    env_file:
+      - ./forecast-monitoring/.env

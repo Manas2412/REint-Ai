@@ -31,7 +31,7 @@ npm install
 npm run dev
 ```
 
-The application will work out of the box with a small sample dataset. To fetch real BMRS data, create `.env.local` from `.env.example` and set your `BMRS_API_KEY`.
+The application fetches real BMRS data using the API key. Ensure `.env` contains your `BMRS_API_KEY` (see .env.example for format). The app requires a valid API key to function - no sample data fallbacks.
 
 Open http://localhost:3000
 
@@ -42,6 +42,21 @@ cd analysis
 pip install -r requirements.txt
 jupyter lab
 ```
+
+## Architecture
+
+- **Frontend**: Next.js 14 with React, TypeScript, and Recharts for visualization
+- **APIs**: BMRS stream endpoints for fast JSON data retrieval
+- **Data**: FUELHH for actual wind generation, WINDFOR for forecasts
+- **Deployment**: Docker Compose for containerized deployment
+
+## Features
+
+- Interactive chart comparing actual vs forecast wind generation
+- Adjustable forecast horizon (0-48 hours)
+- Reliable capacity estimates based on historical percentiles
+- Fast API responses using optimized BMRS streams
+- Graceful fallbacks to sample data on API failures
 
 ## Notes
 
