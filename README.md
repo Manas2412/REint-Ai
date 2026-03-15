@@ -23,7 +23,7 @@ cd REint
 The application relies on the BMRS (Elexon) API. Create an account and obtain an API key:
 https://bmrs.elexon.co.uk/
 
-### 3) Run the web app
+### 3) Run the web app (Local)
 
 ```bash
 cd forecast-monitoring
@@ -35,7 +35,21 @@ The application fetches real BMRS data using the API key. Ensure `.env` contains
 
 Open http://localhost:3000
 
-### 4) Run the analysis notebook
+### 4) Run the web app (Docker)
+
+If you prefer to run the application using Docker, ensure you have Docker and Docker Compose installed:
+
+```bash
+# Add your API key to the .env file
+cp forecast-monitoring/.env.example forecast-monitoring/.env
+
+# Start the application using Docker Compose
+docker compose up --build -d
+```
+
+The application will be accessible at http://localhost:3000. To stop the containers, run `docker compose down`.
+
+### 5) Run the analysis notebook
 
 ```bash
 cd analysis
