@@ -49,24 +49,27 @@ export default function Home() {
         const [actualData, forecastData] = await Promise.all([actualRes.json(), forecastRes.json()]);
 
         if (actualData.error) throw new Error(actualData.error);
-        if (forecastData.error) throw new Error(forecastData.error);
+        // Don't throw on forecast error, just use empty array
 
         type ActualRow = { targetTime: string; generation: number };
         type ForecastRow = { targetTime: string; forecast?: number };
 
         const actualRows = (actualData.data ?? []) as ActualRow[];
-        const forecastRows = (forecastData.data ?? []) as ForecastRow[];
+        const forecastRows = (forecastData.error ? [] : (forecastData.data ?? [])) as ForecastRow[];
 
         const actualMap = new Map<string, number>();
         actualRows.forEach((item) => {
           actualMap.set(item.targetTime, item.generation);
         });
 
-        const merged: SeriesPoint[] = forecastRows.map((item) => {
+        // Use actualRows as base, add forecasts if available
+        const merged: SeriesPoint[] = actualRows.map((item) => {
+          // Find matching forecast
+          const forecast = forecastRows.find((f) => f.targetTime === item.targetTime)?.forecast;
           return {
             time: item.targetTime,
-            forecast: item.forecast,
-            actual: actualMap.get(item.targetTime),
+            forecast: forecast,
+            actual: item.generation,
           };
         });
 

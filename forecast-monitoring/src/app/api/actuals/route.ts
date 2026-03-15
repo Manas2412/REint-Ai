@@ -1,6 +1,5 @@
 import { NextResponse } from "next/server";
 import { fetchFuelHH } from "@/lib/bmrs";
-import { sampleActuals } from "@/data/sample";
 
 function parseISOParam(value: string | null): Date | null {
   if (!value) return null;
@@ -22,13 +21,8 @@ export async function GET(request: Request) {
     return NextResponse.json({ error: "Missing or invalid start/end query params" }, { status: 400 });
   }
 
-  // If no BMRS API key is configured, return a small sample dataset for demo.
   if (!apiKey) {
-    const filtered = sampleActuals.filter((row) => {
-      const ts = new Date(row.targetTime);
-      return ts >= start && ts <= end;
-    });
-    return NextResponse.json({ data: filtered });
+    return NextResponse.json({ error: "BMRS_API_KEY not configured" }, { status: 500 });
   }
 
   try {
@@ -38,8 +32,7 @@ export async function GET(request: Request) {
     const wind = rows
       .filter((row) => row.FuelType?.toLowerCase() === "wind")
       .map((row) => {
-        const [day, month, year] = row.SettlementDate.split("/");
-        const settlementDate = new Date(`${year}-${month}-${day}T00:00:00Z`);
+        const settlementDate = new Date(row.SettlementDate + 'T00:00:00Z');
         const period = Number(row.SettlementPeriod);
 
         // Settlement periods are 30 min, period 1 = 00:00-00:30
@@ -54,11 +47,7 @@ export async function GET(request: Request) {
 
     return NextResponse.json({ data: wind });
   } catch (error) {
-    // Fallback to sample data on API failure
-    const filtered = sampleActuals.filter((row) => {
-      const ts = new Date(row.targetTime);
-      return ts >= start && ts <= end;
-    });
-    return NextResponse.json({ data: filtered });
+    console.error("Error fetching FUELHH data:", error);
+    return NextResponse.json({ error: "Failed to fetch actuals data" }, { status: 500 });
   }
 }

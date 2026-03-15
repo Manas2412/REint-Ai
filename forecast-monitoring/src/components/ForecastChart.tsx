@@ -29,6 +29,10 @@ function formatTooltipLabel(value: unknown) {
 }
 
 export function ForecastChart({ data, horizonHours }: ForecastChartProps) {
+  if (!data || data.length === 0) {
+    return <div style={{ height: 420, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>No data available</div>;
+  }
+
   return (
     <div style={{ width: "100%", height: 420, minWidth: 0, minHeight: 320 }}>
       <ResponsiveContainer width="100%" height="100%">

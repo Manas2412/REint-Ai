@@ -106,6 +106,7 @@
 
 .chartContainer {
   width: 100%;
+  min-height: 420px;
   margin-bottom: 32px;
 }
 
