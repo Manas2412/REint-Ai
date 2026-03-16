@@ -76,3 +76,5 @@ jupyter lab
 
 - The app uses the latest forecast available at least *horizon* hours before each target time.
 - The notebook includes analysis of forecast error distribution and a high-level recommendation for reliable wind capacity.
+- **AI Disclaimer**: Cursor AI code editor was used to assist in building the `analysis/` folder and its contents.
+- **Link to the project**: https://reint.manas-dev.com
